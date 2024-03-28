@@ -19,37 +19,16 @@
     }
   ],
   "paths": {
-    "/audit/event": {
+    "/event": {
       "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
+        "description": "Creates a new event audit",
         "responses": {
-          "200": {
-            "description": "plant response",
+          "201": {
+            "description": "Event response",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -105,17 +84,17 @@
         ],
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
+          "id": {
+            "description": "Id of event",
             "type": "string"
           },
-          "tag": {
-            "description": "Tag to specify the type",
+          "timestamp": {
+            "description": "Timestamp of the new registered event",
             "type": "string"
           }
         }
       },
-      "NewPlant": {
+      "NewEvent": {
         "allOf": [
           {
             "$ref": "#/components/schemas/Plant"

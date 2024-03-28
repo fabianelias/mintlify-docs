@@ -5,6 +5,10 @@
     "dark": "/logo/log-dark.svg",
     "light": "/logo/log-light.svg"
   },
+  "modeToggle": {
+    "default": "dark",
+    "isHidden": true
+  },
   "favicon": "/favicon.svg",
   "colors": {
     "primary": "#171717",
@@ -33,19 +37,9 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
       "name": "Blog",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://loghub.app/blog"
     }
   ],
   "navigation": [
@@ -75,15 +69,25 @@
       ]
     },
     {
-      "group": "Endpoint",
+      "group": "Audit",
       "pages": [
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/get"
+        "api-reference/audit/create",
+        "api-reference/audit/get",
+        "api-reference/audit/get-list"
       ]
     }
   ],
   "footerSocials": {
     "twitter": "https://twitter.com/Loghubapp",
     "github": "https://github.com/loghub-app"
+  },
+  "api": {
+    "playground": {
+        "mode": "hide"
+    },
+      "auth": {
+        "method": "key",
+        "name": "my-api-key"
+    }
   }
 }

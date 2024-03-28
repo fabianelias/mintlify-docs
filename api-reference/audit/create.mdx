@@ -1,0 +1,135 @@
+---
+title: 'Create Audit Event'
+openapi: 'POST /event'
+---
+
+#### Body
+---
+<ParamField path="actor" type="object" required>
+  The parameter 'actor' refers to who performs the action, which can be a user or a system. If the action is performed by the system, it is not necessary to send the 'data' object.
+  <Expandable title="properties">
+    <ResponseField name="type" type="string" required>
+      `user` or `system`
+    </ResponseField>
+    <ResponseField name="data" type="object">
+        The 'actor' data object is necessary only if the type is 'user'.
+        <ParamField path="data.name" type="string" required>
+        The actor's name
+        </ParamField>
+        <ParamField path="data.email" type="string" required>
+        The actor's email
+        </ParamField>
+        <ParamField path="data.internal_id" type="string" required>
+       The internal identifier of the actor in your application
+        </ParamField>
+    </ResponseField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="action" type="string" required>
+  The 'action' parameter refers to the action performed, such as 'settings.updated' or 'email.sending', etc.
+</ParamField>
+
+
+<ParamField path="metadata" type="object" required>
+  You can send whatever you need within this object. For example, you can attach an object with the old data and another with the changes made to the data.
+</ParamField>
+
+<ParamField path="external_id" type="string|number" required>
+  It corresponds to a unique identifier of your application to which the audit event will be associated. For example, if your application manages workspaces, you can send the workspace ID. Then, when you incorporate our log audit table into your application, you will be able to perform specific workspace filtering.
+</ParamField>
+
+
+<RequestExample>
+```javascript Fetch
+const myHeaders = new Headers();
+myHeaders.append("token", "secret_123456");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "actor": {
+    "type": "user",
+    "data": {
+      "name": "Jonathan Wick",
+      "email": "john.wick@loghub.app",
+      "internal_id": 1
+    }
+  },
+  "action": "organization.setting.updated",
+  "metadata": {
+    "old": {
+      "theme": "dark",
+      "organization_name": "continental"
+    },
+    "new": {
+      "theme": "light",
+      "organization_name": "the continental"
+    },
+    "key": "value"
+  },
+  "external_id": "1"
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://api.loghub.app/v1/event", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```bash Curl
+curl --location "https://api.loghub.app/v1/event" \
+--header "token: secret_e1b41f580a2382c107e36a16df566c081ce9be87f74cda" \
+--header "Content-Type: application/json" \
+--data-raw "{
+    \"actor\": {
+        \"type\": \"user\",
+        \"data\": {
+            \"name\": \"Jonathan Wick\",
+            \"email\": \"john.wick@loghub.app\",
+            \"internal_id\": 1
+        }
+    },
+    \"action\": \"organization.setting.updated\",
+    \"metadata\": {
+        \"old\": {
+            \"theme\": \"dark\",
+            \"organization_name\": \"continental\"
+        },
+        \"new\": {
+            \"theme\": \"light\",
+            \"organization_name\": \"the continental\"
+        },
+        \"key\": \"value\"
+    } ,
+    \"external_id\": \"1\"
+}"
+```
+</RequestExample>
+
+<ResponseExample>
+```json 201
+{
+    "id": "12976de0-edbc-4bf4-ae8c-fa982dbaf14a",
+    "timestamp": 1711542595219
+}
+```
+```json 401
+{
+    "message": "The sent token does not exist or is not active",
+    "error": "AUTH_SECRET_NOT_EXIST_OR_NOT_ACTIVE"
+}
+```
+```json 429
+{
+    "message": "You have exceeded your 100 requests per minute limit.",
+    "error": "RATE_LIMIT"
+}
+```
+</ResponseExample>
