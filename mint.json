@@ -11,9 +11,12 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#171717",
+    "primary": "#121212",
     "light": "#FFF",
-    "dark": "#171717",
+    "dark": "#121212",
+    "background": {
+    "dark": "#000"
+    },
     "anchors": {
       "from": "#0D9373",
       "to": "#07C983"
@@ -33,49 +36,44 @@
     {
       "name": "API Reference",
       "url": "api-reference"
-    }
-  ],
-  "anchors": [
+    },
     {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://loghub.app/blog"
+    "name": "Platform",
+    "url": "platform"
     }
   ],
+  "primaryTab": {
+    "name": "Home"
+  },
+  "anchors": [],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
+        "introduction"
       ]
     },
     {
-      "group": "Essentials",
-      "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
-    },
-    {
-      "group": "API Documentation",
+      "group": "API Documentation v1",
       "pages": [
         "api-reference/introduction"
       ]
     },
     {
-      "group": "Audit",
+      "group": "Audit v1",
       "pages": [
         "api-reference/audit/create",
-        "api-reference/audit/get",
-        "api-reference/audit/get-list"
+        "api-reference/audit/get-list",
+        "api-reference/audit/get"
       ]
-    }
+    },
+    {
+        "group": "Platform",
+        "pages": [
+          "platform/organizations",
+          "platform/projects"
+        ]
+      }
   ],
   "footerSocials": {
     "twitter": "https://twitter.com/Loghubapp",
@@ -84,10 +82,6 @@
   "api": {
     "playground": {
         "mode": "hide"
-    },
-      "auth": {
-        "method": "key",
-        "name": "my-api-key"
     }
   }
 }

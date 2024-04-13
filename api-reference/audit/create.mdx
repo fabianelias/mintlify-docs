@@ -1,6 +1,6 @@
 ---
 title: 'Create Audit Event'
-openapi: 'POST /event'
+openapi: 'POST /events'
 ---
 
 #### Body
@@ -27,7 +27,7 @@ openapi: 'POST /event'
 </ParamField>
 
 <ParamField path="action" type="string" required>
-  The 'action' parameter refers to the action performed, such as 'settings.updated' or 'email.sending', etc.
+  The 'action' parameter refers to the action performed, such as 'settings.updated', 'email.sending' or 'has change admin password', etc.
 </ParamField>
 
 
@@ -42,8 +42,9 @@ openapi: 'POST /event'
 
 <RequestExample>
 ```javascript Fetch
-const myHeaders = new Headers();
-myHeaders.append("token", "secret_123456");
+cconst myHeaders = new Headers();
+myHeaders.append("token", "your_secret");
+myHeaders.append("organization", "organization_id");
 myHeaders.append("Content-Type", "application/json");
 
 const raw = JSON.stringify({
@@ -51,8 +52,8 @@ const raw = JSON.stringify({
     "type": "user",
     "data": {
       "name": "Jonathan Wick",
-      "email": "john.wick@loghub.app",
-      "internal_id": 1
+      "email": "val2.wick@loghub.app",
+      "internal_id": "1"
     }
   },
   "action": "organization.setting.updated",
@@ -85,15 +86,16 @@ fetch("https://api.loghub.app/v1/event", requestOptions)
 
 ```bash Curl
 curl --location "https://api.loghub.app/v1/event" \
---header "token: secret_e1b41f580a2382c107e36a16df566c081ce9be87f74cda" \
+--header "token: your_secret" \
+--header "organization: organization_id" \
 --header "Content-Type: application/json" \
 --data-raw "{
     \"actor\": {
         \"type\": \"user\",
         \"data\": {
             \"name\": \"Jonathan Wick\",
-            \"email\": \"john.wick@loghub.app\",
-            \"internal_id\": 1
+            \"email\": \"val2.wick@loghub.app\",
+            \"internal_id\": \"1\"
         }
     },
     \"action\": \"organization.setting.updated\",
@@ -116,8 +118,12 @@ curl --location "https://api.loghub.app/v1/event" \
 <ResponseExample>
 ```json 201
 {
-    "id": "12976de0-edbc-4bf4-ae8c-fa982dbaf14a",
-    "timestamp": 1711542595219
+    "code": "CREATE_EVENT_OK",
+    "status": "ok",
+    "data": {
+        "id": "d71331b8-5448-4542-9a3f-bf3021390a1c",
+        "timestamp": 1713035172197
+    }
 }
 ```
 ```json 401
