@@ -6,7 +6,8 @@
     "light": "/logo/log-light.svg"
   },
   "modeToggle": {
-    "default": "dark"
+    "default": "dark",
+    "isHidden": true
   },
   "favicon": "/favicon.svg",
   "colors": {
