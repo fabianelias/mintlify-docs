@@ -1,15 +1,22 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Loghub Audits",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/log-dark.svg",
+    "light": "/logo/log-light.svg"
+  },
+  "modeToggle": {
+    "default": "dark",
+    "isHidden": true
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#121212",
+    "light": "#FFF",
+    "dark": "#121212",
+    "background": {
+    "dark": "#000"
+    },
     "anchors": {
       "from": "#0D9373",
       "to": "#07C983"
@@ -18,74 +25,63 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:support@loghub.app"
     }
   ],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "url": "https://loghub.app/"
   },
   "tabs": [
     {
       "name": "API Reference",
       "url": "api-reference"
-    }
-  ],
-  "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
     },
     {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+    "name": "Platform",
+    "url": "platform"
     }
   ],
+  "primaryTab": {
+    "name": "Home"
+  },
+  "anchors": [],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
+        "introduction"
       ]
     },
     {
-      "group": "Essentials",
-      "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
-    },
-    {
-      "group": "API Documentation",
+      "group": "API Documentation v1",
       "pages": [
         "api-reference/introduction"
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Audit v1",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "api-reference/audit/create",
+        "api-reference/audit/get-list",
+        "api-reference/audit/get"
       ]
-    }
+    },
+    {
+        "group": "Platform",
+        "pages": [
+          "platform/organizations",
+          "platform/projects"
+        ]
+      }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "twitter": "https://twitter.com/Loghubapp",
+    "github": "https://github.com/loghub-app"
+  },
+  "api": {
+    "playground": {
+        "mode": "hide"
+    }
   }
 }

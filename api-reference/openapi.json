@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "title": "Loghub Api",
+    "description": "Loghub API contains everything you need to register and monitor your applications in cybersecurity and audits.",
     "license": {
       "name": "MIT"
     },
@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "http://api.loghub.app"
     }
   ],
   "security": [
@@ -19,9 +19,24 @@
     }
   ],
   "paths": {
-    "/plants": {
+    "/event": {
+      "post": {
+        "description": "Creates a new event audit",
+        "responses": {
+          "201": {
+            "description": "Event response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Plant"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "description": "Returns a list of audit events that the user has access to",
         "parameters": [
           {
             "name": "limit",
@@ -58,75 +73,6 @@
             }
           }
         }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
       }
     }
   },
@@ -138,17 +84,17 @@
         ],
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
+          "id": {
+            "description": "Id of event",
             "type": "string"
           },
-          "tag": {
-            "description": "Tag to specify the type",
+          "timestamp": {
+            "description": "Timestamp of the new registered event",
             "type": "string"
           }
         }
       },
-      "NewPlant": {
+      "NewEvent": {
         "allOf": [
           {
             "$ref": "#/components/schemas/Plant"

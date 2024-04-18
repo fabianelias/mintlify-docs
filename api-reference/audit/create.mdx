@@ -1,0 +1,174 @@
+---
+title: 'Create Audit Event'
+openapi: 'POST /events'
+---
+
+#### Body
+---
+<ParamField path="actor" type="object" required>
+  The 'actor' parameter refers to who performs the action, which can be a user or a system. If the action is performed by the system, there is no need to send the name, email, internal_id and you can send only the description parameter to describe the system (ex: Cron update prices)
+  <Expandable title="properties">
+    <ResponseField name="type" type="string" required>
+      `user` or `system`
+    </ResponseField>
+    <ResponseField name="data" type="object">
+        The 'actor' data object is necessary only if the type is 'user'.
+        <ParamField path="data.name" type="string">
+        The actor's name
+        </ParamField>
+        <ParamField path="data.email" type="string">
+        The actor's email
+        </ParamField>
+        <ParamField path="data.internal_id" type="string">
+        The internal identifier of the actor in your application
+        </ParamField>
+        <ParamField path="data.description" type="string">
+        System description ex: Cron update prices
+        </ParamField>
+    </ResponseField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="action" type="string" required>
+  The 'action' parameter refers to the action performed, such as 'settings.updated', 'email.sending' or 'has change admin password', etc.
+</ParamField>
+
+
+<ParamField path="metadata" type="object" required>
+  You can send whatever you need within this object. For example, you can attach an object with the old data and another with the changes made to the data.
+</ParamField>
+
+<ParamField path="external_id" type="string|number" required>
+  It corresponds to a unique identifier of your application to which the audit event will be associated. For example, if your application manages workspaces, you can send the workspace ID. Then, when you incorporate our log audit table into your application, you will be able to perform specific workspace filtering.
+</ParamField>
+
+<ParamField path="tags" type="array">
+  tag list
+</ParamField>
+
+<ParamField path="context" type="object" required>
+<Expandable title="properties">
+    <ResponseField name="location" type="string" required>
+      IP Address or some other geolocation identifier
+    </ResponseField>
+    <ResponseField name="user_agent" type="string" required>
+        User agent string request
+    </ResponseField>
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+```javascript Fetch
+cconst myHeaders = new Headers();
+myHeaders.append("token", "your_secret");
+myHeaders.append("organization", "organization_id");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "actor": {
+    "type": "user",
+    "data": {
+      "name": "Jonathan Wick",
+      "email": "vali.wick@loghub.app",
+      "internal_id": "1"
+    }
+  },
+  "action": "api.testing.tres",
+  "metadata": {
+    "old": {
+      "theme": "dark",
+      "organization_name": "continental"
+    },
+    "new": {
+      "theme": "light",
+      "organization_name": "the continental"
+    },
+    "key": "value"
+  },
+  "tags": [
+    "production",
+    "..."
+  ],
+  "external_id": "1",
+  "context": {
+    "location": "190.0.0.12",
+    "user_agent": "Chrome..."
+  }
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://api.loghub.app/v1/event", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```bash Curl
+curl --location "https://api.loghub.app/v1/event" \
+--header "token: your_secret" \
+--header "organization: organization_id" \
+--header "Content-Type: application/json" \
+--data-raw "{
+    \"actor\": {
+        \"type\": \"user\",
+        \"data\": {
+            \"name\": \"Jonathan Wick\",
+            \"email\": \"vali.wick@loghub.app\",
+            \"internal_id\": \"1\"
+        }
+    },
+    \"action\": \"api.testing.tres\",
+    \"metadata\": {
+        \"old\": {
+            \"theme\": \"dark\",
+            \"organization_name\": \"continental\"
+        },
+        \"new\": {
+            \"theme\": \"light\",
+            \"organization_name\": \"the continental\"
+        },
+        \"key\": \"value\"
+    },
+    \"tags\": [
+        \"production\",
+        \"...\"
+    ],
+    \"external_id\": \"1\",
+    \"context\": {
+        \"location\": \"190.0.0.12\",
+        \"user_agent\": \"Chrome...\"
+    }
+}"
+```
+</RequestExample>
+
+<ResponseExample>
+```json 201
+{
+    "code": "CREATE_EVENT_OK",
+    "status": "ok",
+    "data": {
+        "id": "d71331b8-5448-4542-9a3f-bf3021390a1c",
+        "timestamp": 1713035172197
+    }
+}
+```
+```json 401
+{
+    "message": "The sent token does not exist or is not active",
+    "error": "AUTH_SECRET_NOT_EXIST_OR_NOT_ACTIVE"
+}
+```
+```json 429
+{
+    "message": "You have exceeded your 100 requests per minute limit.",
+    "error": "RATE_LIMIT"
+}
+```
+</ResponseExample>

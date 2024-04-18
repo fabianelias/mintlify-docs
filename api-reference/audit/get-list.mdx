@@ -1,0 +1,116 @@
+---
+title: 'Get Audit Event List'
+openapi: 'GET /events'
+---
+
+<ParamField path="page" type="number" required>
+It corresponds to the page number you wish to retrieve.
+</ParamField>
+
+<ParamField path="limit" type="number" required>
+It corresponds to the limit of events returned per request. Accepted values are 5, 10, 15, and 20.
+</ParamField>
+
+<ParamField path="order" type="string" required>
+By default, sorting is performed based on the creation date of the audit event. Accepted values are 'desc' or 'asc'
+</ParamField>
+
+<ParamField path="external_id" type="string" required>
+It corresponds to a unique identifier of your application to which the audit event will be associated. For example, if your application manages workspaces, you can send the workspace ID. Then, when you incorporate our log audit table into your application, you will be able to perform specific workspace filtering.
+</ParamField>
+
+<RequestExample>
+```javascript Fetch
+const myHeaders = new Headers();
+myHeaders.append("organization", "organization_id");
+myHeaders.append("token", "secret_token");
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch("https://api.loghub.app/v1/events/?page=0&limit=5&order=desc&external_id=your_external_id", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+```bash Curl
+curl --location "https://api.loghub.app/v1/events/{id_event}" \
+--header "organization: your_organization_id" \
+--header "token: secret_123456"
+```
+</RequestExample>
+
+
+<ResponseExample>
+```json 200
+[{
+    "code": "GET_EVENT_DETAIL_READY",
+    "status": "ok",
+    "data": {
+        "id": "b912fae5-c38e-4458-a801-dfba46...",
+        "actor": {
+            "type": "user",
+            "data": {
+                "name": "Jonathan Wick",
+                "email": "val2.wick@loghub.app",
+                "internal_id": "1"
+            }
+        },
+        "action": "organization.setting.updated",
+        "metadata": {
+            "old": {
+                "theme": "dark",
+                "organization_name": "continental"
+            },
+            "new": {
+                "theme": "light",
+                "organization_name": "the continental"
+            },
+            "key": "value"
+        },
+        "extra": {
+            "ip": "::1",
+            "ips": [],
+            "user_agent": "PostmanRuntime/7.36.3",
+            "protocol": "http",
+            "headers": {
+                "token": "secret_*****",
+                "organization": "a924324e-299a-46d4-89cd-731a3f3cc444",
+                "content-type": "application/json",
+                "user-agent": "PostmanRuntime/7.36.3",
+                "accept": "*/*",
+                "host": "localhost:4000",
+                "accept-encoding": "gzip, deflate, br",
+                "connection": "keep-alive",
+                "content-length": "521",
+                "project_id": "7ecbe32b-2a38-4c7a-ae2...",
+                "organization_id": "a924324e-299a-46d4-89cd...",
+                "token_id": "ab5e8187-0664-4e75-be49...."
+            }
+        },
+        "project_id": "7ecbe32b-2a38-4c7a-ae29...",
+        "external_id": "2",
+        "token_id": "ab5e8187-0664-4e75-be49-7...",
+        "createdAt": "2024-04-05T16:22:22.203Z",
+        "updatedAt": "2024-04-05T16:22:22.203Z"
+    }
+},
+...]
+```
+```json 401
+{
+    "message": "The sent token does not exist or is not active",
+    "error": "AUTH_SECRET_NOT_EXIST_OR_NOT_ACTIVE"
+}
+```
+```json 429
+{
+    "message": "You have exceeded your 100 requests per minute limit.",
+    "error": "RATE_LIMIT"
+}
+```
+</ResponseExample>
