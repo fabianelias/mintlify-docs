@@ -6,21 +6,24 @@ openapi: 'POST /events'
 #### Body
 ---
 <ParamField path="actor" type="object" required>
-  The parameter 'actor' refers to who performs the action, which can be a user or a system. If the action is performed by the system, it is not necessary to send the 'data' object.
+  The 'actor' parameter refers to who performs the action, which can be a user or a system. If the action is performed by the system, there is no need to send the name, email, internal_id and you can send only the description parameter to describe the system (ex: Cron update prices)
   <Expandable title="properties">
     <ResponseField name="type" type="string" required>
       `user` or `system`
     </ResponseField>
     <ResponseField name="data" type="object">
         The 'actor' data object is necessary only if the type is 'user'.
-        <ParamField path="data.name" type="string" required>
+        <ParamField path="data.name" type="string">
         The actor's name
         </ParamField>
-        <ParamField path="data.email" type="string" required>
+        <ParamField path="data.email" type="string">
         The actor's email
         </ParamField>
-        <ParamField path="data.internal_id" type="string" required>
-       The internal identifier of the actor in your application
+        <ParamField path="data.internal_id" type="string">
+        The internal identifier of the actor in your application
+        </ParamField>
+        <ParamField path="data.description" type="string">
+        System description ex: Cron update prices
         </ParamField>
     </ResponseField>
   </Expandable>
@@ -39,6 +42,20 @@ openapi: 'POST /events'
   It corresponds to a unique identifier of your application to which the audit event will be associated. For example, if your application manages workspaces, you can send the workspace ID. Then, when you incorporate our log audit table into your application, you will be able to perform specific workspace filtering.
 </ParamField>
 
+<ParamField path="tags" type="array">
+  tag list
+</ParamField>
+
+<ParamField path="context" type="object" required>
+<Expandable title="properties">
+    <ResponseField name="location" type="string" required>
+      IP Address or some other geolocation identifier
+    </ResponseField>
+    <ResponseField name="user_agent" type="string" required>
+        User agent string request
+    </ResponseField>
+  </Expandable>
+</ParamField>
 
 <RequestExample>
 ```javascript Fetch
@@ -52,11 +69,11 @@ const raw = JSON.stringify({
     "type": "user",
     "data": {
       "name": "Jonathan Wick",
-      "email": "val2.wick@loghub.app",
+      "email": "vali.wick@loghub.app",
       "internal_id": "1"
     }
   },
-  "action": "organization.setting.updated",
+  "action": "api.testing.tres",
   "metadata": {
     "old": {
       "theme": "dark",
@@ -68,7 +85,15 @@ const raw = JSON.stringify({
     },
     "key": "value"
   },
-  "external_id": "1"
+  "tags": [
+    "production",
+    "..."
+  ],
+  "external_id": "1",
+  "context": {
+    "location": "190.0.0.12",
+    "user_agent": "Chrome..."
+  }
 });
 
 const requestOptions = {
@@ -94,11 +119,11 @@ curl --location "https://api.loghub.app/v1/event" \
         \"type\": \"user\",
         \"data\": {
             \"name\": \"Jonathan Wick\",
-            \"email\": \"val2.wick@loghub.app\",
+            \"email\": \"vali.wick@loghub.app\",
             \"internal_id\": \"1\"
         }
     },
-    \"action\": \"organization.setting.updated\",
+    \"action\": \"api.testing.tres\",
     \"metadata\": {
         \"old\": {
             \"theme\": \"dark\",
@@ -109,8 +134,16 @@ curl --location "https://api.loghub.app/v1/event" \
             \"organization_name\": \"the continental\"
         },
         \"key\": \"value\"
-    } ,
-    \"external_id\": \"1\"
+    },
+    \"tags\": [
+        \"production\",
+        \"...\"
+    ],
+    \"external_id\": \"1\",
+    \"context\": {
+        \"location\": \"190.0.0.12\",
+        \"user_agent\": \"Chrome...\"
+    }
 }"
 ```
 </RequestExample>
